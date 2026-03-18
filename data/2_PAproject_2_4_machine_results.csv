@@ -1,0 +1,10 @@
+﻿Department,Performance_Rating,Salary,Work_Hours,Prediction,Attrition_Probability (%)
+Eng,4,5531,62,잔류(Stay),40.48
+R&D,1,6451,39,잔류(Stay),9.56
+HR,5,7443,47,잔류(Stay),7.82
+R&D,3,4935,51,잔류(Stay),27.86
+R&D,3,5876,66,잔류(Stay),40.9
+Mkt,1,7959,63,이직(Left),47.62
+HR,4,2126,37,이직(Left),69.47
+HR,4,5177,68,잔류(Stay),31.1
+HR,5,5056,61,잔류(Stay),11.39
