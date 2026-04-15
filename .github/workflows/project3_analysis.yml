@@ -1,0 +1,49 @@
+name: EDA Analysis (project3)
+
+on:
+  push:
+    paths:
+      - 'project3/data/*.csv'   # project3/data 폴더의 CSV 파일 변경 시 자동 실행
+  workflow_dispatch:             # 수동 실행도 가능
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Node.js 20 deprecated 경고 해결
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r project3/requirements.txt
+
+      - name: Run EDA analysis
+        run: python project3/main.py
+
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[GitHub Actions] EDA 분석 결과 보고서"
+          to: ${{ secrets.MAIL_TO }}
+          from: GitHub Actions EDA Analysis
+          body: |
+            EDA 분석이 완료되었습니다.
+            - 부서/직무별 이탈률 히트맵
+            - 성과등급별 이탈률 막대그래프
+            첨부된 이미지 파일을 확인해 주세요.
+          attachments: |
+            project3/data/heatmap_attrition.png
+            project3/data/barplot_performance.png
