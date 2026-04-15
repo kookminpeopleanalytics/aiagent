@@ -1,0 +1,48 @@
+name: HLM Analysis (project4)
+
+on:
+  push:
+    paths:
+      - 'project4/data/*.xlsx'   # project4/data 폴더의 xlsx 파일 변경 시 자동 실행
+  workflow_dispatch:             # 수동 실행도 가능
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Node.js 20 deprecated 경고 해결
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r project4/requirements.txt
+
+      - name: Run HLM analysis
+        run: python project4/main.py
+
+      - name: Send mail
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "[GitHub Actions] HLM 평가점수 보정 분석 결과"
+          to: ${{ secrets.MAIL_TO }}
+          from: GitHub Actions HLM Analysis
+          body: |
+            HLM(혼합 효과 모형) 기반 평가점수 보정 분석이 완료되었습니다.
+            - 평가자별 편향 정보가 반영된 보정 점수는 HLM 분석 결과 엑셀(adjusted_results) 파일을 확인해 주세요.
+            - 구체적 분석 로그, 기술통계, 분산분석결과는 로그 텍스트 파일(analysis_log)을 확인해 주세요.
+          attachments: |
+            project4/data/adjusted_results.xlsx
+            project4/data/analysis_log.txt
