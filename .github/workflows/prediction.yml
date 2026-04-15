@@ -9,6 +9,8 @@ on:
 jobs:
   predict:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Node.js 20 deprecated 경고 해결
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,6 +33,7 @@ jobs:
         with:
           server_address: ${{ secrets.MAIL_SERVER }}
           server_port: ${{ secrets.MAIL_PORT }}
+          secure: true
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "[GitHub Actions] 이직 예측 결과 보고서"
