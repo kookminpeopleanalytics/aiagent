@@ -1,0 +1,32 @@
+name: ANOVA vs ANCOVA Analysis (project5)
+
+on:
+  push:
+    paths:
+      - 'project5/data/*.xlsx'   # project5/data 폴더의 xlsx 파일 변경 시 자동 실행
+  workflow_dispatch:             # 수동 실행도 가능
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r project5/requirements.txt
+
+      - name: Run Leadership analysis
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python project5/main.py

@@ -57,7 +57,7 @@ try:
     print(f"\n분석 결과가 '{result_path}'에 저장되었습니다.")
 
 finally:
-    # 8. 보안 및 용량 관리를 위해 Google 서버에서 파일 삭제
+    # 9. 보안 및 용량 관리를 위해 Google 서버에서 파일 삭제
     if video_file:
         try:
             client.files.delete(name=video_file.name)

@@ -9,8 +9,6 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # Node.js 20 deprecated 경고 해결
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,9 +31,8 @@ jobs:
       - name: Send mail
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          secure: true
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "[GitHub Actions] 동영상 분석 결과 보고서"
@@ -45,3 +42,4 @@ jobs:
             동영상 AI 분석이 완료되었습니다.
             상세 분석 결과는 첨부파일을 확인해 주세요.
           attachments: project2/data/analysis_result.txt
+
