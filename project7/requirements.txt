@@ -1,6 +1,3 @@
 pandas
 openpyxl
 requests
-networkx
-matplotlib
-koreanize-matplotlib
